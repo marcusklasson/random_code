@@ -1,0 +1,17 @@
+function [ beliefs ] = computeBeliefs(dataCost, msgU, msgD, msgL, msgR)
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+
+beliefs = dataCost;
+% Incoming messages
+incomingMsgU = circshift(msgU, 1, 1);
+incomingMsgD = circshift(msgD, -1, 1);
+incomingMsgL = circshift(msgL, 1, 2);
+incomingMs
+beliefs = beliefs + 
+beliefs = beliefs + ;
+beliefs = beliefs + 
+beliefs = beliefs + circshift(msgU, -1, 2);
+
+end
+
