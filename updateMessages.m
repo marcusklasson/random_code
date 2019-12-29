@@ -2,7 +2,6 @@ function [ msgU, msgD, msgL, msgR ] = updateMessages( msgUPrev, msgDPrev, msgLPr
 %UNTITLED5 Summary of this function goes here
 %   Min-Sum message update
 
-
 % Where does SmoothnessCost comes in?! Probably has something to with the
 % Potts model!
 msgU = zeros(size(dataCost));
@@ -46,7 +45,7 @@ if strcmp(smoothness, 'truncated_linear')
         msgR(:, :, i) = min(msgRTmp, [], 3);
     end
 
-else % Potts model
+elseif  strcmp(smoothness, 'potts_model') % Potts model
     
     % Get smallest disparity values
     spqU = min(npqU, [], 3);
@@ -64,55 +63,6 @@ else % Potts model
     end
 
 end
-% for i=1:nDisparityValues
-%     
-%     msgUTmp = zeros(size(dataCost));
-%     msgDTmp = zeros(size(dataCost));
-%     msgLTmp = zeros(size(dataCost));
-%     msgRTmp = zeros(size(dataCost));
-%     
-%     for j=1:nDisparityValues
-%         msgUTmp(:, :, j) = dataCost(:, :, j) + lambda*min(abs(i-j), K) + msgIncomingFromD(:, :, j) + msgIncomingFromL(:, :, j) + msgIncomingFromR(:, :, j);
-%         msgDTmp(:, :, j) = dataCost(:, :, j) + lambda*min(abs(i-j), K) + msgIncomingFromU(:, :, j) + msgIncomingFromL(:, :, j) + msgIncomingFromR(:, :, j);
-%         msgLTmp(:, :, j) = dataCost(:, :, j) + lambda*min(abs(i-j), K) + msgIncomingFromD(:, :, j) + msgIncomingFromU(:, :, j) + msgIncomingFromR(:, :, j);
-%         msgRTmp(:, :, j) = dataCost(:, :, j) + lambda*min(abs(i-j), K) + msgIncomingFromD(:, :, j) + msgIncomingFromL(:, :, j) + msgIncomingFromU(:, :, j);
-%     end
-%     
-%     msgU(:, :, i) = min(msgUTmp, [], 3);
-%     msgD(:, :, i) = min(msgDTmp, [], 3);
-%     msgL(:, :, i) = min(msgLTmp, [], 3);
-%     msgR(:, :, i) = min(msgRTmp, [], 3);
-%     
-% end
 
-% msgUTmp = dataCost + msgIncomingFromD + msgIncomingFromL + msgIncomingFromR;
-% msgDTmp = dataCost + msgIncomingFromU + msgIncomingFromL + msgIncomingFromR;
-% msgLTmp = dataCost + msgIncomingFromD + msgIncomingFromU + msgIncomingFromR;
-% msgRTmp = dataCost + msgIncomingFromD + msgIncomingFromL + msgIncomingFromU;
-% 
-% for i=1:nDisparityValues
-%     
-%     msgUTmp2 = zeros(size(dataCost));
-%     msgDTmp2 = zeros(size(dataCost));
-%     msgLTmp2 = zeros(size(dataCost));
-%     msgRTmp2 = zeros(size(dataCost));
-%     
-%     for j=1:nDisparityValues
-%         msgUTmp2(:, :, j) = msgUTmp(:, :, j) + lambda*min(abs(i-j), K);
-%         msgDTmp2(:, :, j) = msgDTmp(:, :, j) + lambda*min(abs(i-j), K);
-%         msgLTmp2(:, :, j) = msgLTmp(:, :, j) + lambda*min(abs(i-j), K);
-%         msgRTmp2(:, :, j) = msgRTmp(:, :, j) + lambda*min(abs(i-j), K);
-%     end
-%     
-%     msgU(:, :, i) = min(msgUTmp2, [], 3);
-%     msgD(:, :, i) = min(msgDTmp2, [], 3);
-%     msgL(:, :, i) = min(msgLTmp2, [], 3);
-%     msgR(:, :, i) = min(msgRTmp2, [], 3);
-%     
-% end
-
-
-k = msgU(1,1,:);
-%k(:)
 end
 
