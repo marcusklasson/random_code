@@ -88,16 +88,13 @@ if __name__ == "__main__":
     #status = load_checkpoint(ckpt, './trained_models')
     
     best_loss = float("inf")
+    print("Start training...")
     for epoch in range(1, args.epochs+1):
         
         train_loss = 0.
         samples = model.sample(args.n_samples)
         for batch_idx, image in enumerate(train_dataset):
-            if batch_idx == 0:
-                recons, _ = model.reconstruct(sampling='iwae', data=image)
-                print(recons)
             loss = train_step(model, image, optimizer)
-            #print("batch loss: ", loss)
             train_loss += loss
 
         print('====> Epoch: {}\tLoss: {:.4f}'.format(epoch, train_loss / n_batches_train))
@@ -106,7 +103,7 @@ if __name__ == "__main__":
         for batch_idx, image in enumerate(test_dataset):
             loss = train_step(model, image, optimizer)
             test_loss += loss
-
+            
         print('\tTest Loss: {:.4f}'.format(test_loss / n_batches_test))
         
         is_best = test_loss < best_loss
@@ -114,6 +111,7 @@ if __name__ == "__main__":
         #save_checkpoint(manager, is_best, folder='./trained_models')
         
         # Sample from prior
+        #samples, _ = model.reconstruct(sampling='iwae', data=image[:16])
         samples = model.sample(args.n_samples)
         sz = np.sqrt(samples.shape[0])
         fig = plt.figure(figsize=(sz,sz))
