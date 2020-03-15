@@ -168,7 +168,7 @@ class VAE(tf.keras.Model):
                 max_ = np.max(log_ws, axis=0)
                 lse = np.log(np.sum(np.exp(log_ws-max_), axis=0)) + max_
                 log_norm_ws = log_ws - lse
-
+                log_norm_ws = tf.cast(log_norm_ws, tf.float64)
                 # ws = np.exp(log_ws)
                 # sums = np.sum(ws, axis=0)
                 # norm_ws = ws / sums
@@ -187,8 +187,17 @@ class VAE(tf.keras.Model):
 
                 samps = []
                 for j in range(batch_size):
-
-                    samp = np.argmax(np.random.multinomial(1, np.exp(log_norm_ws.T[j])-.000001))
+                    #print("log_norm_ws.shape: ", log_norm_ws.shape)
+                    #print(log_norm_ws)
+                    #samp = np.argmax(np.random.multinomial(1, np.exp(log_norm_ws.T[j])-.000001))
+                    #print(np.exp(log_norm_ws.numpy().T[j]))
+                    # normalize log_norm_ws again for it to work in np.random.multinomial!
+                    p = np.exp(log_norm_ws.numpy().T[j]) / np.sum(np.exp(log_norm_ws.numpy().T[j]))
+                    #print(p)
+                    #print(np.sum(p))
+                    #print(np.sum(np.exp(log_norm_ws.numpy().T[j])))
+                    samp = np.argmax(np.random.multinomial(1, p) )
+                    #print("samp: ", samp)
                     samps.append(recons[samp][j])
                     # print samp
 
@@ -199,7 +208,7 @@ class VAE(tf.keras.Model):
 
             recons_resampled = np.array(recons_resampled)
             # print recons_resampled.shape
-
+            recons_resampled = tf.reshape(recons_resampled, [self.n_particles, batch_size, 28, 28, 1])
 
             return recons_resampled, batch
     """
